@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 )
 
 type ViaCep struct {
@@ -22,32 +21,69 @@ type ViaCep struct {
 }
 
 func main() {
-	for _, url := range os.Args[1:] {
-		req, err := http.Get(url)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error making request: %v\n", err)
-		}
-		defer req.Body.Close()
-		res, err := io.ReadAll(req.Body)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading response body: %v\n", err)
-		}
-		var data ViaCep
-		err = json.Unmarshal(res, &data)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing response: %v\n", err)
-		}
-		file, err := os.Create("zipCode.txt")
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error creating txt file: %v\n", err)
-		}
-		defer file.Close()
+	// Using closures
+	//http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//	w.Write([]byte("Hello, World!\n"))
+	//})
 
-		_, err = file.WriteString(fmt.Sprintf("Neighborhood: %s,\nZipCode: %s,\nComplement: %s,"+
-			"\nAreaCode: %s,\nGia: %s,\nIbge: %s,\nCity: %s,\nStreet:%s,\nSiafi: %s,\nState: %s",
-			data.Neighborhood, data.ZipCode, data.Complement, data.AreaCode, data.Gia, data.Ibge, data.City,
-			data.Street, data.Siafi, data.State))
+	http.HandleFunc("/", BuscaCepHandler)
+	fmt.Println("Servidor rodando na porta: 8080...")
 
-		//fmt.Println(data)
+	http.ListenAndServe(":8080", nil)
+
+}
+
+func BuscaCepHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
+	cepParam := r.URL.Query().Get("cep")
+	if cepParam == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	cep, err := BuscaCep(cepParam)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	result, err := json.Marshal(cep)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(result)
+
+	// Shortcut
+	//json.NewEncoder(w).Encode(cep)
+
+}
+
+func BuscaCep(cep string) (*ViaCep, error) {
+	req, err := http.Get("http://viacep.com.br/ws/" + cep + "/json/")
+	if err != nil {
+		return nil, err
+
+	}
+	defer req.Body.Close()
+
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var c ViaCep
+	err = json.Unmarshal(body, &c)
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+
 }
