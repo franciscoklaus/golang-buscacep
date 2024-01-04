@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 GoLang-CEPSearch
 GO code designed for conducting an address search based on the specified ZIP code.
 
