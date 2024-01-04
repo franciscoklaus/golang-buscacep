@@ -7,4 +7,17 @@ Key features include:
 - HTTP requests for seamless communication
 - Defer for resource management
 - File manipulation for enhanced functionality
-- Structs 
+- Structs
+
+
+
+###  Usage:
+
+Example:
+```bash
+go run main.go http://viacep.com.br/ws/01001000/json/
+```
+
+Replace "01001000" with the actual numeric ZIP code you want to query.
+
+In this version, I added the functionality to create a text file containing the data returned from the query. 
