@@ -16,7 +16,7 @@ GO code designed for conducting an address search based on the specified ZIP cod
 
 ## Version
 
-Current Version: v1.0
+Current Version: v1.1
 
 For a list of all releases and their release notes, see the [Releases](https://github.com/franciscoklaus/golang-buscacep/releases) page.
 
@@ -27,11 +27,18 @@ For a list of all releases and their release notes, see the [Releases](https://g
 - Defer for resource management
 - File manipulation for enhanced functionality
 - Structs
+- Http.ListenAndServe
+- Http.HandleFunc
 
 ## Usage
 
 ```bash
-go run main.go http://viacep.com.br/ws/01001000/json/
+go run main.go
+
+curl http://localhost:8080/?cep=01001000
 ```
 Replace "01001000" with the actual numeric ZIP code you want to query.
 
+Result:
+
+![img.png](img.png)
