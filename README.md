@@ -1,5 +1,5 @@
 # golang-buscacep
-Código em GO para realizar buscar de endereço através do cep informado.
+Código em GO para realizar busca de endereço através do cep informado.
 
 Utilizei :
 * Json (Marshall e Unmarshall)
