@@ -1,8 +1,9 @@
-# golang-buscacep
-Código em GO para realizar buscar de endereço através do cep informado.
+GoLang-CEPSearch
+GO code designed for conducting an address search based on the specified ZIP code.
 
-Utilizei :
-* Json (Marshall e Unmarshall)
-* Http requests
-* Defer
-* Manipulação de arquivos
+Key features include:
+
+- JSON (Marshal and Unmarshal) for efficient data handling
+- HTTP requests for seamless communication
+- Defer for resource management
+- File manipulation for enhanced functionality
