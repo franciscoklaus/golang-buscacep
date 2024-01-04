@@ -7,3 +7,4 @@ Key features include:
 - HTTP requests for seamless communication
 - Defer for resource management
 - File manipulation for enhanced functionality
+- Structs 
